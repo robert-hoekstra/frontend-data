@@ -94,25 +94,28 @@ fetchData.then(function(data) {
   // console.log(gallerij)
 
   // Start Graph section (with help of tutorial: https://www.youtube.com/watch?v=NlBt-7PuaLk)
+
+  var nestedData = d3.nest()
+  .key(function(d) { return d.date.value; }).sortKeys(d3.ascending)
+  // .rollup(function(v) { return v.length })
+  .entries(gallerij);
+
+  console.log(nestedData)
+
+  // for (let i = 0; i < nestedData.length; i++) {
+  //    console.log(nestedData[i].values.length)
+
+  // }
   const svg = d3.select("svg");
   const width = +svg.attr("width");
   const height = +svg.attr("height");
 
-  //   var groupedByYear = d3.nest()
-  //   .key(function(d) { return d.date; })
-  //   .entries(data.date);
-  //   console.log(groupedByYear)
-
   // Count total items.
   // For future development
-  let arraySize = 0;
-  data.forEach(element => {
-    arraySize++;
-  });
 
   const render = data => {
-    const xValue = d => d.date.value;
-    const yValue = d => d.date.value;
+    const xValue = d => d.value;
+    const yValue = d => d.key;
     //Add margin to make SVG bit more readable. And space for titles, axisticks and descriptions.
     const margin = { top: 20, right: 40, bottom: 20, left: 100 };
     const innerWidth = width - margin.left - margin.right;
@@ -122,7 +125,7 @@ fetchData.then(function(data) {
     const xScale = d3
       .scaleLinear()
       .domain([0, d3.max(data, xValue)])
-      .range([0, arraySize]);
+      .range([0, innerWidth]);
 
     // Set Domain and Range for yScale
     //Set distance between bars with Scaleband
@@ -156,7 +159,7 @@ fetchData.then(function(data) {
     g.selectAll("rect")
       //What data needs to be added  
       //Check DOM if there are enough elements. If not make extra.
-      .data(gallerij)
+      .data(nestedData)
       //Append the rect value to DOM-element
       .enter()
       .append("rect")
@@ -173,7 +176,8 @@ fetchData.then(function(data) {
   };
 
   //Activeer render functie met gegeven dataset
-  render(gallerij);
+  // render(gallerij);
+  render(nestedData);
 
   // !!! UNUSED CODE !!!
   // Kept for learning purposes
