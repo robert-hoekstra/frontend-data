@@ -20,3 +20,38 @@ svg{
     margin-left: 10%;
     margin-right: 10%;
 }
+
+.toolTip {
+    position: absolute;
+    display: none;
+    min-width: 80px;
+    height: auto;
+    background: none repeat scroll 0 0 #ffffff;
+    border: 1px solid #6F257F;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .legend rect {
+    fill:white;
+    stroke:black;
+    opacity:0.8;}
+
+  /* rect:hover{
+      fill: red;
+      width: (width*2);
+      animation: normal;
+  } */
+
+  /* The animation code */
+@keyframes colorTransition {
+    from {fill: steelblue;}
+    to {fill: red;}
+  }
+  
+  /* The element to apply the animation to */
+  rect:hover {
+    animation-name: colorTransition;
+    animation-duration: 0.5s;
+    fill: red
+  }

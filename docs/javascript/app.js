@@ -30,7 +30,7 @@ const query = `
 
                 }
 
-            }LIMIT 500`;
+            }LIMIT 1000`;
 
 const fetchData = d3
   .json(url + "?query=" + encodeURIComponent(query) + "&format=json")
@@ -41,18 +41,18 @@ const fetchData = d3
 
 fetchData.then(function(data) {
   // Check if properties contain images.
-  let gallerij = data.filter(obj => Object.keys(obj).includes("imgLink"));
+  let gallery = data.filter(obj => Object.keys(obj).includes("imgLink"));
   // Delete properties that are not needed
-  gallerij.forEach(element => {
+  gallery.forEach(element => {
     delete element.cho;
     delete element.type;
     delete element.typeLabel;
   });
   // Clean date to uniform
-  // console.log("galerij: ", gallerij)
+  // console.log("galerij: ", gallery)
   // const maanden = ["januari", "februari","maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"]
 
-  gallerij.forEach(element => {
+  gallery.forEach(element => {
     element.date.value = element.date.value
       .toLowerCase()
       .replace("ca. ", "")
@@ -80,44 +80,56 @@ fetchData.then(function(data) {
       //only keep last year from entry
       .substr(-4, 4);
     // String naar nummer
-    element.date.value = parseInt(element.date.value);
+    element.date = parseInt(element.date.value);
     // Titel cleanup
-    element.titel.value = element.titel.value.trim();
+    element.titel = element.titel.value.trim();
     // Beschrijving Cleanup
-    element.beschrijving.value = element.beschrijving.value.trim();
+    element.beschrijving = element.beschrijving.value.trim();
+
     // Als er geen beschrijving beschikbaar is. Informeer dan de gebruiker.
-    if (element.beschrijving.value == "") {
-      element.beschrijving.value = "Er is geen beschrijving beschikbaar";
+    if (element.beschrijving == "") {
+      element.beschrijving = "Er is geen beschrijving beschikbaar";
     }
   });
 
-  // console.log(gallerij)
-
   // Start Graph section (with help of tutorial: https://www.youtube.com/watch?v=NlBt-7PuaLk)
 
-  var nestedData = d3.nest()
-  .key(function(d) { return d.date.value; }).sortKeys(d3.ascending)
-  // .rollup(function(v) { return v.length })
-  .entries(gallerij);
+  const nestedData = d3
+    .nest()
+    .key(function(d) {
+      return d.date;
+    })
+    .sortKeys(d3.ascending)
+    .rollup(function(v) {
+      return {
+        count: v.length
+      };
+    })
+    .entries(gallery);
 
-  console.log(nestedData)
+  console.log("nested: ", nestedData);
+  console.log("gallery: ", gallery);
 
   // for (let i = 0; i < nestedData.length; i++) {
   //    console.log(nestedData[i].values.length)
 
   // }
-  const svg = d3.select("svg");
-  const width = +svg.attr("width");
+  const svg = d3.select("svg#chart1");
+  const width = window.innerWidth;
   const height = +svg.attr("height");
 
   // Count total items.
   // For future development
 
   const render = data => {
-    const xValue = d => d.value;
+    const xValue = d => d.value.count;
     const yValue = d => d.key;
+    const tooltip = d3
+      .select("body")
+      .append("div")
+      .attr("class", "toolTip");
     //Add margin to make SVG bit more readable. And space for titles, axisticks and descriptions.
-    const margin = { top: 20, right: 40, bottom: 20, left: 100 };
+    const margin = { top: 20, right: 40, bottom: 40, left: 100 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -143,21 +155,39 @@ fetchData.then(function(data) {
 
     //Set Axis and ticks to y axis
     g.append("g").call(d3.axisLeft(yScale));
+
     g.append("g")
-      .call(d3.axisBottom(xScale).tickSize(-innerWidth))
+      .call(d3.axisBottom(xScale))
       .attr("transform", `translate(0,${innerHeight})`);
 
     // Set title to graph
     g.append("text")
-      .attr("x", width / 2)
+      .attr("x", width / 3)
       .attr("y", 0 - margin.top / 4)
       .attr("text-anchor", "middle")
       .text("Aantal foto's per jaartal");
 
+    // Set title to Y-axis
+    g.append("text")
+      .attr("y", -50)
+      .attr("x", -width / 2)
+      .attr("text-anchor", "middle")
+      .text("Jaartal")
+      .attr("transform", function(d) {
+        return "rotate(-90)";
+      });
+
+    // Set title to X-Axis
+    g.append("text")
+      .attr("x", width / 3)
+      .attr("y", innerHeight * 1.023)
+      .attr("text-anchor", "middle")
+      .text("Aantal Foto's");
+
     // Display all objects with a rectangle. (to make bars)
     //Set width per bar based on full size SVG
     g.selectAll("rect")
-      //What data needs to be added  
+      //What data needs to be added
       //Check DOM if there are enough elements. If not make extra.
       .data(nestedData)
       //Append the rect value to DOM-element
@@ -166,23 +196,52 @@ fetchData.then(function(data) {
       // Set attributes to display barsizes
       .attr("y", d => yScale(yValue(d)))
       .attr("width", d => xScale(xValue(d)))
-      .attr("height", yScale.bandwidth());
+      .attr("height", yScale.bandwidth())
+
+      // Tooltip
+      .on("mousemove", function(d) {
+        tooltip
+          .style("left", d3.event.pageX - 50 + "px")
+          .style("top", d3.event.pageY - 70 + "px")
+          .style("display", "inline-block")
+          .html("Jaartal: " + d.key + "<br>" + "Aantal foto: " + d.value.count);
+      })
+      .on("mouseout", function(d) {
+        tooltip.style("display", "none");
+      });
 
     // g.append("legend")
     //     .attr("class","legend")
     //     .attr("transform","translate(50,30)")
     //     .style("font-size","12px")
     //     .call(d3.legend)
+
+    legend = g
+      .append("g")
+      .attr("data-legend", function(d) {
+        return d.value.count;
+      })
+      .attr("class", "legend")
+      .attr("transform", "translate(50,30)")
+      .style("font-size", "12px")
+      .call(d3.legend);
+
+    setTimeout(function() {
+      legend
+        .style("font-size", "20px")
+        .attr("data-style-padding", 10)
+        .call(d3.legend);
+    }, 1000);
   };
 
   //Activeer render functie met gegeven dataset
-  // render(gallerij);
+  // render(gallery);
   render(nestedData);
 
   // !!! UNUSED CODE !!!
   // Kept for learning purposes
 
-  //  console.log(gallerij);
+  //  console.log(gallery);
 
   // for (let i=0; i < data.length; i++){
   //     let objectItem = data[i];
