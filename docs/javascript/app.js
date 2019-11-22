@@ -30,7 +30,7 @@ const query = `
 
                 }
 
-            }LIMIT 1000`;
+            }LIMIT 10000`;
 
 const fetchData = d3
   .json(url + "?query=" + encodeURIComponent(query) + "&format=json")
@@ -116,7 +116,7 @@ fetchData.then(function(data) {
   // }
   const svg = d3.select("svg#chart1");
   const width = window.innerWidth;
-  const height = +svg.attr("height");
+  const height = (nestedData.length * 40);
 
   // Count total items.
   // For future development
@@ -198,7 +198,7 @@ fetchData.then(function(data) {
       .attr("width", d => xScale(xValue(d)))
       .attr("height", yScale.bandwidth())
 
-      // Tooltip
+      // Tooltip  (source: https://bl.ocks.org/alandunning/274bf248fd0f362d64674920e85c1eb7)
       .on("mousemove", function(d) {
         tooltip
           .style("left", d3.event.pageX - 50 + "px")
@@ -210,33 +210,51 @@ fetchData.then(function(data) {
         tooltip.style("display", "none");
       });
 
-    // g.append("legend")
-    //     .attr("class","legend")
-    //     .attr("transform","translate(50,30)")
-    //     .style("font-size","12px")
-    //     .call(d3.legend)
+      var quantize = d3.scaleOrdinal()
+      .domain([0, d3.max(data, xValue)])
+      .range([0, innerWidth]);
 
-    legend = g
-      .append("g")
-      .attr("data-legend", function(d) {
-        return d.value.count;
-      })
-      .attr("class", "legend")
-      .attr("transform", "translate(50,30)")
-      .style("font-size", "12px")
-      .call(d3.legend);
+      svg.append("rect")
+        .attr("class", "legendBox")
+        .attr("width", "200px")
+        .attr("height", "200px")
+        .attr("fill", "pink")
+        .attr("transform", "translate(900,50)");
 
-    setTimeout(function() {
-      legend
-        .style("font-size", "20px")
-        .attr("data-style-padding", 10)
-        .call(d3.legend);
-    }, 1000);
+      svg.append("g")
+        .attr("class", "legendQuant")
+        .attr("transform", "translate(900,50)")
+        .attr("fill", "steelblue");
+
+      var colorLegend = d3.legendColor()
+          .labelFormat(d3.format(""))
+          .useClass(true)
+          .scale(quantize);
+
+      svg.select(".legendQuant")
+        .call(colorLegend);
+
+        //button to swap over datasets
+        d3.select("#wrapper").append("button")
+        .text("Delete data")
+        .on("click",function(){
+            //select new data
+            d3.exit().remove(gallerij)
+
+        });
+
   };
+
+
+// Legend maken yippie
+
+
 
   //Activeer render functie met gegeven dataset
   // render(gallery);
   render(nestedData);
+
+// add a data-legend attribute to your path
 
   // !!! UNUSED CODE !!!
   // Kept for learning purposes
