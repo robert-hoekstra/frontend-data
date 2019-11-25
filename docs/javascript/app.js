@@ -216,7 +216,7 @@ fetchData.then(function(data) {
         // console.log("Jaar: " + d.key)
         // console.log("Aantal: " + d.value.count)
 
-        var ul = d3.select("body").append("ul");
+        const ul = d3.select("body").append("ul");
 
         ul.selectAll("li")
           .data(selectedYearCollection)
