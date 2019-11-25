@@ -30,7 +30,7 @@ const query = `
 
                 }
 
-            }LIMIT 10000`;
+            }LIMIT 500`;
 
 const fetchData = d3
   .json(url + "?query=" + encodeURIComponent(query) + "&format=json")
@@ -81,6 +81,9 @@ fetchData.then(function(data) {
       .substr(-4, 4);
     // String naar nummer
     element.date = parseInt(element.date.value);
+    if (element.date.length <= 4) {
+      delete element.date;
+    }
     // Titel cleanup
     element.titel = element.titel.value.trim();
     // Beschrijving Cleanup
@@ -116,7 +119,7 @@ fetchData.then(function(data) {
   // }
   const svg = d3.select("svg#chart1");
   const width = window.innerWidth;
-  const height = (nestedData.length * 40);
+  const height = nestedData.length * 40;
 
   // Count total items.
   // For future development
@@ -145,7 +148,7 @@ fetchData.then(function(data) {
       .scaleBand()
       .domain(data.map(yValue))
       .range([0, innerHeight])
-      .padding(0.1);
+      .padding(0.05);
 
     // const yAxis = d3.axisLeft(yScale);
     // set svg to const g to work with
@@ -186,17 +189,43 @@ fetchData.then(function(data) {
 
     // Display all objects with a rectangle. (to make bars)
     //Set width per bar based on full size SVG
-    g.selectAll("rect")
+    g.selectAll("rectangle")
       //What data needs to be added
       //Check DOM if there are enough elements. If not make extra.
       .data(nestedData)
       //Append the rect value to DOM-element
       .enter()
       .append("rect")
+      .attr("class", "rectangle")
       // Set attributes to display barsizes
       .attr("y", d => yScale(yValue(d)))
       .attr("width", d => xScale(xValue(d)))
       .attr("height", yScale.bandwidth())
+
+      // retrieve image links
+      .on("click", function(d) {
+        const selectedYearCollection = [];
+        gallery.forEach(element => {
+          if (element.date == d.key) {
+            console.log(element.date);
+            console.log(element.imgLink.value);
+            selectedYearCollection.push(element.imgLink.value);
+            console.log(selectedYearCollection);
+          }
+        });
+        // console.log("Jaar: " + d.key)
+        // console.log("Aantal: " + d.value.count)
+
+        var ul = d3.select("body").append("ul");
+
+        ul.selectAll("li")
+          .data(selectedYearCollection)
+          .enter()
+          .append("li")
+          .append("a")
+          .attr("href", String)
+          .html(String);
+      })
 
       // Tooltip  (source: https://bl.ocks.org/alandunning/274bf248fd0f362d64674920e85c1eb7)
       .on("mousemove", function(d) {
@@ -210,51 +239,50 @@ fetchData.then(function(data) {
         tooltip.style("display", "none");
       });
 
-      var quantize = d3.scaleOrdinal()
+    var quantize = d3
+      .scaleOrdinal()
       .domain([0, d3.max(data, xValue)])
       .range([0, innerWidth]);
 
-      svg.append("rect")
-        .attr("class", "legendBox")
-        .attr("width", "200px")
-        .attr("height", "200px")
-        .attr("fill", "pink")
-        .attr("transform", "translate(900,50)");
+    svg
+      .append("rect")
+      .attr("class", "legendBox")
+      .attr("width", "200px")
+      .attr("height", "200px")
+      .attr("fill", "pink")
+      .attr("transform", "translate(900,50)");
 
-      svg.append("g")
-        .attr("class", "legendQuant")
-        .attr("transform", "translate(900,50)")
-        .attr("fill", "steelblue");
+    svg
+      .append("g")
+      .attr("class", "legendQuant")
+      .attr("transform", "translate(900,50)")
+      .attr("fill", "steelblue");
 
-      var colorLegend = d3.legendColor()
-          .labelFormat(d3.format(""))
-          .useClass(true)
-          .scale(quantize);
+    var colorLegend = d3
+      .legendColor()
+      .labelFormat(d3.format(""))
+      .useClass(true)
+      .scale(quantize);
 
-      svg.select(".legendQuant")
-        .call(colorLegend);
+    svg.select(".legendQuant").call(colorLegend);
 
-        //button to swap over datasets
-        d3.select("#wrapper").append("button")
-        .text("Delete data")
-        .on("click",function(){
-            //select new data
-            d3.exit().remove(gallerij)
-
-        });
-
+    //Sort
+    d3.select("#wrapper")
+      .append("button")
+      .text("Delete data")
+      .on("click", function() {
+        //select new data
+        d3.remove(gallery);
+      });
   };
 
-
-// Legend maken yippie
-
-
+  // Legend maken yippie
 
   //Activeer render functie met gegeven dataset
   // render(gallery);
   render(nestedData);
 
-// add a data-legend attribute to your path
+  // add a data-legend attribute to your path
 
   // !!! UNUSED CODE !!!
   // Kept for learning purposes
