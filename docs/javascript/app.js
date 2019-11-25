@@ -216,6 +216,8 @@ fetchData.then(function(data) {
         // console.log("Jaar: " + d.key)
         // console.log("Aantal: " + d.value.count)
 
+
+        // source: http://bl.ocks.org/ne8il/5131235
         const ul = d3.select("body").append("ul");
 
         ul.selectAll("li")
