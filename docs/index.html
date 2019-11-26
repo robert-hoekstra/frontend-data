@@ -16,46 +16,36 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.js"></script>
-    <script src="javascript/app.js"></script>
+    <script src="javascript/appClean.js"></script>
 </head>
 
 <body>
     <div id="wrapper">
+        <header>
+            <img src="" alt="">
+        </header>
         <section>
-            <h1>Foto's der onze kolonien</h1>
+            <h1>The Photo Exhibition</h1>
             <p>Welkom bij het nationaal archief van wereldculturen. Vanuit onze database is er een complete collectie
                 aan foto's gedigitaliseerd en publiekelijk gemaakt. Je kunt de foto's bekijken op de website of bij één
                 van onze 4 musea.
             </p>
-
             <section>
                 <h2>Een greep uit onze selectie!</h2>
                 <form>Selecteer een jaartal</form>
-                <svg id="chart1" height="500" width="1200"></svg>
-                <svg id="svg-color-quant"></svg>
+                <div id="container">
+                <svg id="chart1" height="2000" width="1200"></svg>
+            </div>
+
+            <h2 id="selectionHead">Jouw selectie</h2>
+            <section id="selectionSection"></section>
 
             </section>
-            <section>
-                <h2>Geselecteerd jaartal</h2>
-                <section id="selectie">
-                    
-                </section>
-            </section>
-            <h2>Onze musea</h2>
-            <ul>
-                <li><a href="https://www.troopenmuseum.nl"></a> Troopenmuseum</li>
-                <li><a href="https://www.museumvolkenkunde.nl"></a> Volkenkunde</li>
-                <li><a href="https://www.museumbergendeal.nl"></a> Berg en Dal</li>
-                <li><a href="https://www.museumrotterdam.nl"></a> Rotterdam</li>
-            </ul>
-        </section>
-        <section>
-            <h2>Naar de databank</h2>
-            <a href="https://collectie.wereldculturen.nl/">Databank voor de wereldculturen</a>
-            <p></p>
-        </section>
-        <footer>Credits: Robert</footer>
+            <footer>Credits: Robert</footer>
     </div>
+
+
+
 
 
 

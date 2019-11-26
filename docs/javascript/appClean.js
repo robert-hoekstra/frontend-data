@@ -110,63 +110,45 @@ fetchData.then(function(data) {
     })
     .entries(gallery);
 
-  console.log("nested: ", nestedData);
-  console.log("gallery: ", gallery);
-  console.log("Badum", nestedData.key);
-
-  //This function will change the graph when the user selects another variable
-
-  // console.log("form",form)
-  // for (let i = 0; i < nestedData.length; i++) {
-  //    console.log(nestedData[i].values.length)
-
-  // }
   const svg = d3.select("svg#chart1");
   const width = window.innerWidth;
   const height = nestedData.length * 40;
-
-  // Count total items.
-  // For future development
-
   const render = data => {
     const xValue = d => d.value.count;
     const yValue = d => d.key;
-    
+
     const tooltip = d3
       .select("body")
       .append("div")
       .attr("class", "toolTip");
     //Add margin to make SVG bit more readable. And space for titles, axisticks and descriptions.
-    const margin = { top: 20, right: 40, bottom: 40, left: 100 };
+    const margin = { top: 100, right: 40, bottom: 40, left: 100 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
-    // Set Domain and Range for xScale
     const xScale = d3
       .scaleLinear()
       .domain([0, d3.max(data, xValue)])
       .range([0, innerWidth]);
 
-    // Set Domain and Range for yScale
-    //Set distance between bars with Scaleband
     const yScale = d3
       .scaleBand()
       .domain(data.map(yValue))
       .range([0, innerHeight])
       .padding(0.05);
 
-    // const yAxis = d3.axisLeft(yScale);
-    // set svg to const g to work with
     const g = svg
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     //Set Axis and ticks to y axis
-    g.append("g").classed("yass",true).call(d3.axisLeft(yScale));
+    g.append("g")
+      .classed("yass", true)
+      .call(d3.axisLeft(yScale));
 
     g.append("g")
-    .classed("xass",true)
-    .call(d3.axisBottom(xScale))
+      .classed("xass", true)
+      .call(d3.axisBottom(xScale))
       .attr("transform", `translate(0,${innerHeight})`);
 
     // Set title to graph
@@ -196,17 +178,11 @@ fetchData.then(function(data) {
       .classed("xTitle", true)
       .text("Aantal Foto's");
 
-    // Display all objects with a rectangle. (to make bars)
-    //Set width per bar based on full size SVG
     g.selectAll("rectangle")
-      //What data needs to be added
-      //Check DOM if there are enough elements. If not make extra.
       .data(nestedData)
-      //Append the rect value to DOM-element
       .enter()
       .append("rect")
       .attr("class", "rectangle")
-      // Set attributes to display barsizes
       .attr("y", d => yScale(yValue(d)))
       .attr("width", d => xScale(xValue(d)))
       .attr("height", yScale.bandwidth())
@@ -216,20 +192,19 @@ fetchData.then(function(data) {
         const selectedYearCollection = [];
         gallery.forEach(element => {
           if (element.date == d.key) {
-            // console.log(element.date);
-            // console.log(element.imgLink.value);
             selectedYearCollection.push(element.imgLink.value);
           }
-          d3.select("ul").remove();
+          d3.select("#selectionHead")
+          .text("De foto's uit het jaar: " + d.key);
+          d3.select("ul").remove(); // Delete gallery section
         });
-        // source: http://bl.ocks.org/ne8il/5131235
-        // create new list with images
+
+        // create new list with images. (source: http://bl.ocks.org/ne8il/5131235)
         const ul = d3
-          .select("body")
+          .select("#selectionSection")
           .append("ul")
           .attr("class", "selectionList")
           .data(selectedYearCollection);
-        // .selectAll("li").exit().remove()
 
         ul.selectAll("li")
           .data(selectedYearCollection)
@@ -241,6 +216,7 @@ fetchData.then(function(data) {
           .attr("src", String)
           .html(String);
       })
+
       // Tooltip  (source: https://bl.ocks.org/alandunning/274bf248fd0f362d64674920e85c1eb7)
       .on("mousemove", function(d) {
         tooltip
@@ -253,44 +229,10 @@ fetchData.then(function(data) {
         tooltip.style("display", "none");
       });
 
-    // var quantize = d3
-    //   .scaleOrdinal()
-    //   .domain([0, d3.max(data, xValue)])
-    //   .range([0, innerWidth]);
-
-    // svg
-    //   .append("rect")
-    //   .attr("class", "legendBox")
-    //   .attr("width", "200px")
-    //   .attr("height", "200px")
-    //   .attr("fill", "pink")
-    //   .attr("transform", "translate(900,50)");
-
-    // svg
-    //   .append("g")
-    //   .attr("class", "legendQuant")
-    //   .attr("transform", "translate(900,50)")
-    //   .attr("fill", "steelblue");
-
-    // const colorLegend = d3
-    //   .legendColor()
-    //   .labelFormat(d3.format(""))
-    //   .useClass(true)
-    //   .scale(quantize);
-
-    // svg.select(".legendQuant").call(colorLegend);
-
-    //Sort
-    d3.select("#wrapper")
-      .append("button")
-      .text("Delete data")
-      .on("click", function() {
-        //select new data
-        d3.remove(ul);
-      });
-
-    // gestolen van Laurens
-    const form = d3
+    // Code van Laurens. (Source: https://vizhub.com/Razpudding/4a61de4a4034423a98ae79d0135781f7)
+    // Edit to own datastructure
+    // const form = 
+    d3
       .select("form")
       .style("left", "16px")
       .style("top", "16px")
@@ -300,71 +242,47 @@ fetchData.then(function(data) {
         let filterData = nestedData.filter(function(d) {
           return d.key == selectedYear;
         });
-        console.log("Mooi", filterData)
-        // update en exit <3
-       
-        d3
-        .select("svg#chart1")
-        .selectAll('rect')
-        .data(filterData)
-        .exit()
-        .remove()
+        console.log("Mooi", filterData);
 
-
-        
+        d3.select("svg#chart1")
+          .selectAll("rect")
+          .data(filterData)
+          .exit()
+          .remove();
 
         //setup scales
         const xValue = d => d.value.count;
         const yValue = d => d.key;
-
-       
-
         const margin = { top: 40, right: 40, bottom: 40, left: 100 };
         const innerWidth = 500 - margin.left - margin.right;
         const innerHeight = 300 - margin.top - margin.bottom;
-    
-        // Set Domain and Range for xScale
         const xScale = d3
           .scaleLinear()
           .domain([0, d3.max(nestedData, xValue)])
           .range([0, innerWidth]);
 
-         
-    
-        // Set Domain and Range for yScale
-        //Set distance between bars with Scaleband
         const yScale = d3
           .scaleBand()
           .domain(filterData.map(yValue))
           .range([0, innerHeight])
           .padding(0.05);
 
-        
-    
-        // const yAxis = d3.axisLeft(yScale);
-        // set svg to const g to work with
         const g = svg
           .select("g")
           .attr("transform", `translate(${margin.left},${margin.top})`);
 
+        d3.select(".yass").call(d3.axisLeft(yScale)); // //Set Axis and ticks to y axis
 
-        // //Set Axis and ticks to y axis
-        d3.select('.yass').call(d3.axisLeft(yScale));
-    
-        d3.select('.xass').call(d3.axisBottom(xScale))
+        d3.select(".xass")
+          .call(d3.axisBottom(xScale))
           .attr("transform", `translate(0,${innerHeight})`);
-    
-        // Set title to graph
 
-
-        g.select(".graphTitle")
-        .attr("x", innerWidth / 2)
+        g.select(".graphTitle") // Set title to graph
+          .attr("x", innerWidth / 2)
           .attr("text-anchor", "middle")
           .text("Aantal foto's in de periode: " + filterData[0].key);
-    
-        // Set title to Y-axis
 
-        g.select(".yTitle")
+        g.select(".yTitle") // Set title to Y-axis
           .attr("y", -50)
           .attr("x", -innerWidth / 3)
           .attr("text-anchor", "middle")
@@ -373,31 +291,22 @@ fetchData.then(function(data) {
             return "rotate(-90)";
           });
 
-        // Set title to X-Axis
-        g.select(".xTitle")
+        g.select(".xTitle") // Set title to X-Axis
           .attr("x", innerWidth / 3)
           .attr("y", innerHeight + 50)
           .attr("text-anchor", "middle")
           .text("Aantal Foto's");
-    
-        // Display all objects with a rectangle. (to make bars)
-        //Set width per bar based on full size SVG
-    
+
         g.selectAll("rectangle")
-          //What data needs to be added
-          //Check DOM if there are enough elements. If not make extra.
           .data(filterData)
-          //Append the rect value to DOM-element
           .enter()
           .select("rect")
           .attr("class", "rectangle")
-          // Set attributes to display barsizes
           .attr("y", d => yScale(yValue(d)))
           .attr("width", d => xScale(xValue(d)))
-          .attr("height", yScale.bandwidth())
-    
+          .attr("height", yScale.bandwidth());
 
-
+        
       })
       .selectAll("option")
       .data(nestedData)
@@ -406,72 +315,6 @@ fetchData.then(function(data) {
       .attr("value", d => d.key)
       .text(d => d.key);
   };
-
-  function plotSelection() {}
-  // Legend maken yippie
-
-  //Activeer render functie met gegeven dataset
-  // render(gallery);
   render(nestedData);
-
-  // add a data-legend attribute to your path
-
-  // !!! UNUSED CODE !!!
-  // Kept for learning purposes
-
-  //  console.log(gallery);
-
-  // for (let i=0; i < data.length; i++){
-  //     let objectItem = data[i];
-  //     // objectItem.cho = objectItem.cho.value;
-  //     // objectItem.type = objectItem.type.value;
-  //     // console.log(i)
-  //     // objectItem.date = objectItem.date.value;
-
-  //     // if (objectItem.image == undefined) {
-  //     //     objectItem.image = null
-  //     //     return objectItem.image
-  //     // }
-
-  //     if (objectItem.imgLink) {
-  //         objectItem.image = objectItem.imgLink.value
-
-  //     } else {
-  //         delete objectItem
-  //     }
-
-  // if objectItem.
-
-  //     console.log(objectItem.image)
-
-  // }
-  // return data
-
-  // handle data
-  //    const handleData = (json) =>{
-  //        let bindings =  json.results.bindings;
-  //        for (let i=0; i < bindings.length; i++){
-  //            let objectItem = bindings[i];
-  //            objectItem.cho = objectItem.cho.value;
-  //            objectItem.placeName = objectItem.placeName.value;
-  //            objectItem.title = objectItem.title.value;
-  //            objectItem.type = objectItem.type.value;
-  //            objectItem.image = objectItem.imageLink.value;
-  //        }
-  //        console.log(bindings);
-  //        return bindings
-  //    };
-  // fetch data
-
-  //    fetch(url+'?query='+encodeURIComponent(query)+'&format=json')
-  //        .then(res => res.json())
-  //        .then(handleData => {
-
-  //         console.log(handleData)
-  //         handleData.map()
-
-  //        })
-  //        .catch(err => console.error(err));
-
-  // Fetch Query
 });
+
