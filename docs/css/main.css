@@ -60,3 +60,21 @@ svg{
     animation-duration: 0.5s;
     fill: red
   }
+
+  .selectionList {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    }
+
+  .selectionList li img{
+    width: 100%;
+    border: solid black 2px;
+    height: 100%;
+  }
+
+  .selectionList li {
+    list-style: none;
+  }
