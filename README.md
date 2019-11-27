@@ -4,6 +4,8 @@
 # Interactive Picture Exhibition
 This application is about putting everybody's personal heritage on screen by collecting all kinds of portret pictures taken around the world. These pictures are collected and digitalized by the Nationale Vereniging voor Wereldculturen.
 
+[![Image from Gyazo](https://i.gyazo.com/512d98854c916e6cf0a3fe653906dbdb.gif)](https://gyazo.com/512d98854c916e6cf0a3fe653906dbdb)
+
 
 ## Getting Started
 To start the application you need to clone the repository to your local machine. Once you have done that. Open the `index.html` file with a web-browser. I advise to use Chrome. You can download Chrome [here](https://www.google.com/intl/nl/chrome/).
@@ -27,19 +29,13 @@ Go to localhost:#### whatever you set your host to.
 ## How to use the application
 The app displays some options / filters that need to be selected in order to work properly.
 
-**1. Choosing your Heritage**
-
-You can choose your own heritage or a whole different heritage. The following option will now present itself. Including some pictures to start with!
-
-![options](https://i.imgur.com/m9ayecx.png)
-
-**2. Choosing a timestamp**
+**1. Choosing a timestamp**
 
 You can now cycle through all the years to explore different collections of pictures that are taken within the selected year. Notice the difference in material and quality? What else can you explore?
 
-![time-options](https://i.imgur.com/13pZrnM.png)
+[![Image from Gyazo](https://i.gyazo.com/70b2f3142035f6aea3cba90273e6f343.gif)](https://gyazo.com/70b2f3142035f6aea3cba90273e6f343)
 
-**3. Explore pictures**
+**2. Explore pictures**
 
 ![explore-options](https://i.imgur.com/7dSvB0f.png)
 
@@ -68,43 +64,36 @@ In order to 'talk' with and retrieve data from the collection we make use of a d
 
 My query looks like this:
 
-```
-# Prefixes define the predicates that are needed to search in the network of graphs within the database!
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX dc: <http://purl.org/dc/elements/1.1/>
-PREFIX dct: <http://purl.org/dc/terms/>
-PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-PREFIX edm: <http://www.europeana.eu/schemas/edm/>
-PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+```sparql
+ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX dc: <http://purl.org/dc/elements/1.1/>
+    PREFIX dct: <http://purl.org/dc/terms/>
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+    PREFIX edm: <http://www.europeana.eu/schemas/edm/>
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    SELECT * 
+    WHERE {
+        <https://hdl.handle.net/20.500.11840/termmaster1397> skos:narrower* ?type .
+        ?type skos:prefLabel ?typeLabel.
+        ?cho edm:object ?type.
+        # ?cho dc:title ?title.
+        # FILTER langMatches(lang(?title), "ned")
 
-# Select all results in the database
-SELECT * 
-# Define what the options are of what results I really want to retrieve.
-WHERE {
-# Retrieve all items that contain the word foto's or a word that is related to that word.
-Foto's is declared by the termmaster: <https://hdl.handle.net/20.500.11840/termmaster1397>
-    
-    
-    <https://hdl.handle.net/20.500.11840/termmaster1397> skos:narrower* ?type .
-    ?type skos:prefLabel ?typeLabel.
-    ?cho edm:object ?type.
-   # ?cho dc:title ?title.
-   # FILTER langMatches(lang(?title), "ned")
+        # kijk of het woord portret voorkomt in de title of de description
+                ?cho (dc:title | dc:description) ?beschrijving.   
+                FILTER(REGEX(?beschrijving, "portret"))  
+            
 
-    # Does the word 'portret' (dutch for Portrait) display in the title or description of the result? If Yes: give me items. if No: reject item.
-    ?cho (dc:title | dc:description) ?beschrijving.   
-    FILTER(REGEX(?beschrijving, "portret"))  
-  
+                # Geef evt. een verwijzing naar het plaatje als het er is
+                OPTIONAL {
+                    ?cho dc:title ?titel.
+                    ?cho dct:created ?date.
+                    ?cho foaf:depiction ?imgLink.
 
-    # Get extra details if they are available. If not, still show results.
-    OPTIONAL {
-        ?cho dc:title ?titel.
-        ?cho dct:created ?date.
-        ?cho foaf:depiction ?imgLink.
+                }
 
-    }
-}
+            }LIMIT 500`;
 ```
 
 #### JSON Objects
