@@ -64,43 +64,36 @@ In order to 'talk' with and retrieve data from the collection we make use of a d
 
 My query looks like this:
 
-```
-# Prefixes define the predicates that are needed to search in the network of graphs within the database!
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX dc: <http://purl.org/dc/elements/1.1/>
-PREFIX dct: <http://purl.org/dc/terms/>
-PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-PREFIX edm: <http://www.europeana.eu/schemas/edm/>
-PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+```sparql
+ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX dc: <http://purl.org/dc/elements/1.1/>
+    PREFIX dct: <http://purl.org/dc/terms/>
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+    PREFIX edm: <http://www.europeana.eu/schemas/edm/>
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    SELECT * 
+    WHERE {
+        <https://hdl.handle.net/20.500.11840/termmaster1397> skos:narrower* ?type .
+        ?type skos:prefLabel ?typeLabel.
+        ?cho edm:object ?type.
+        # ?cho dc:title ?title.
+        # FILTER langMatches(lang(?title), "ned")
 
-# Select all results in the database
-SELECT * 
-# Define what the options are of what results I really want to retrieve.
-WHERE {
-# Retrieve all items that contain the word foto's or a word that is related to that word.
-Foto's is declared by the termmaster: <https://hdl.handle.net/20.500.11840/termmaster1397>
-    
-    
-    <https://hdl.handle.net/20.500.11840/termmaster1397> skos:narrower* ?type .
-    ?type skos:prefLabel ?typeLabel.
-    ?cho edm:object ?type.
-   # ?cho dc:title ?title.
-   # FILTER langMatches(lang(?title), "ned")
+        # kijk of het woord portret voorkomt in de title of de description
+                ?cho (dc:title | dc:description) ?beschrijving.   
+                FILTER(REGEX(?beschrijving, "portret"))  
+            
 
-    # Does the word 'portret' (dutch for Portrait) display in the title or description of the result? If Yes: give me items. if No: reject item.
-    ?cho (dc:title | dc:description) ?beschrijving.   
-    FILTER(REGEX(?beschrijving, "portret"))  
-  
+                # Geef evt. een verwijzing naar het plaatje als het er is
+                OPTIONAL {
+                    ?cho dc:title ?titel.
+                    ?cho dct:created ?date.
+                    ?cho foaf:depiction ?imgLink.
 
-    # Get extra details if they are available. If not, still show results.
-    OPTIONAL {
-        ?cho dc:title ?titel.
-        ?cho dct:created ?date.
-        ?cho foaf:depiction ?imgLink.
+                }
 
-    }
-}
+            }LIMIT 500`;
 ```
 
 #### JSON Objects
