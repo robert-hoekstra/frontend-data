@@ -4,6 +4,8 @@
 # Interactive Picture Exhibition
 This application is about putting everybody's personal heritage on screen by collecting all kinds of portret pictures taken around the world. These pictures are collected and digitalized by the Nationale Vereniging voor Wereldculturen.
 
+[![Image from Gyazo](https://i.gyazo.com/512d98854c916e6cf0a3fe653906dbdb.gif)](https://gyazo.com/512d98854c916e6cf0a3fe653906dbdb)
+
 
 ## Getting Started
 To start the application you need to clone the repository to your local machine. Once you have done that. Open the `index.html` file with a web-browser. I advise to use Chrome. You can download Chrome [here](https://www.google.com/intl/nl/chrome/).
