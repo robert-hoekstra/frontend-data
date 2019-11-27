@@ -29,6 +29,8 @@ svg text {
 svg{
    position: block;
    border: solid white 2px;
+   margin-left: 10%;
+   margin-right: 10%;
 }
 
 .toolTip {
