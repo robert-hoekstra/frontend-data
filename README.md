@@ -29,19 +29,13 @@ Go to localhost:#### whatever you set your host to.
 ## How to use the application
 The app displays some options / filters that need to be selected in order to work properly.
 
-**1. Choosing your Heritage**
-
-You can choose your own heritage or a whole different heritage. The following option will now present itself. Including some pictures to start with!
-
-![options](https://i.imgur.com/m9ayecx.png)
-
-**2. Choosing a timestamp**
+**1. Choosing a timestamp**
 
 You can now cycle through all the years to explore different collections of pictures that are taken within the selected year. Notice the difference in material and quality? What else can you explore?
 
-![time-options](https://i.imgur.com/13pZrnM.png)
+[![Image from Gyazo](https://i.gyazo.com/70b2f3142035f6aea3cba90273e6f343.gif)](https://gyazo.com/70b2f3142035f6aea3cba90273e6f343)
 
-**3. Explore pictures**
+**2. Explore pictures**
 
 ![explore-options](https://i.imgur.com/7dSvB0f.png)
 
