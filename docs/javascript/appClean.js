@@ -243,7 +243,6 @@ fetchData.then(function(data) {
         let filterData = nestedData.filter(function(d) {
           return d.key == selectedYear;
         });
-        console.log("Mooi", filterData);
 
         d3.select("svg#chart1")
           .selectAll("rect")
