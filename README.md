@@ -116,5 +116,6 @@ Visitors of the musea in the Netherlands. I want to showcase something that can 
 #### functional-programming
 Basics of D3. Visualizing data. Part of the Tech Track course given @ Amsterdam University of Applied Sciences.
 
-
-
+# Acknowledgements 
+* [Eyob Dejene](https://github.com/EyobDejene) for helping with enter, update exit pattern of D3.
+* [Nick Meijer](https://github.com/CountNick)for helping out with arrow notations and scoops.
