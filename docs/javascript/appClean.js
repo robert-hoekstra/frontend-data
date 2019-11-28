@@ -113,6 +113,8 @@ fetchData.then(function(data) {
   const svg = d3.select("svg#chart1");
   const width = window.innerWidth;
   const height = nestedData.length * 40;
+  
+  // Start render
   const render = data => {
     const xValue = d => d.value.count;
     const yValue = d => d.key;
@@ -143,11 +145,11 @@ fetchData.then(function(data) {
 
     //Set Axis and ticks to y axis
     g.append("g")
-      .classed("yass", true)
+      .classed("y-axis", true)
       .call(d3.axisLeft(yScale));
 
     g.append("g")
-      .classed("xass", true)
+      .classed("x-axis", true)
       .call(d3.axisBottom(xScale))
       .attr("transform", `translate(0,${innerHeight})`);
 
@@ -229,9 +231,8 @@ fetchData.then(function(data) {
         tooltip.style("display", "none");
       });
 
-    // Code van Laurens. (Source: https://vizhub.com/Razpudding/4a61de4a4034423a98ae79d0135781f7)
+    // Code from Razpudding. (Source: https://vizhub.com/Razpudding/4a61de4a4034423a98ae79d0135781f7)
     // Edit to own datastructure
-    // const form = 
     d3
       .select("form")
       .style("left", "16px")
@@ -261,19 +262,19 @@ fetchData.then(function(data) {
           .domain([0, d3.max(nestedData, xValue)])
           .range([0, innerWidth]);
 
-        const yScale = d3
-          .scaleBand()
+        const yScale = d3   // set y-Scale
+          .scaleBand()      // Adjust to size based on data
           .domain(filterData.map(yValue))
           .range([0, innerHeight])
           .padding(0.05);
 
-        const g = svg
+        const g = svg    // Create SVG as group
           .select("g")
           .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        d3.select(".yass").call(d3.axisLeft(yScale)); // //Set Axis and ticks to y axis
+        d3.select(".y-axis").call(d3.axisLeft(yScale)); // //Set Axis and ticks to y axis
 
-        d3.select(".xass")
+        d3.select(".x-axis")      // Set Axis and ticks to x-axis
           .call(d3.axisBottom(xScale))
           .attr("transform", `translate(0,${innerHeight})`);
 
