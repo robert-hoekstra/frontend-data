@@ -35,6 +35,7 @@ You can now cycle through all the years to explore different collections of pict
 [![Image from Gyazo](https://i.gyazo.com/70b2f3142035f6aea3cba90273e6f343.gif)](https://gyazo.com/70b2f3142035f6aea3cba90273e6f343)
 
 **2. Explore pictures**
+[![Explore images](https://i.gyazo.com/4c0b57ad9d72336422d6e663175df078.gif)](https://gyazo.com/4c0b57ad9d72336422d6e663175df078)
 
 ![explore-options](https://i.imgur.com/7dSvB0f.png)
 
