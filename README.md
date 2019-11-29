@@ -110,13 +110,17 @@ The application is run within a browser environment. The application is a protot
 For this application a internetconnection is needed to retrieve ((dynamic)) data from the database.
 
 ## Who is the target audience?
-Visitors of the musea in the Netherlands. I want to showcase something that can be found in the collection that is so broad that hopefully the visitors might visit the online collection or different exhibitionts/musea found in the NMVW group.
+Visitors of the musea in the Netherlands. Specifically young people that are interested in their roots and their ancestors. I want to showcase something that can be found in the collection that is so broad that hopefully the visitors might visit the online collection or different exhibitionts/musea found in the NMVW group.
 
 #### functional-programming
 Basics of D3. Visualizing data. Part of the Tech Track course given @ Amsterdam University of Applied Sciences.
 
 # Documentation
 [Documentation](https://github.com/robert-hoekstra/frontend-data/wiki)
+
+# Update Pattern (Dynamic Data)
+[Explanation Update Pattern](https://github.com/robert-hoekstra/frontend-data/wiki/D3)
+[How I used the pattenr](https://github.com/robert-hoekstra/frontend-data/wiki/D3-Bar-Chart#selecting-specific-data-enter-update-exit)
 
 # Acknowledgements 
 * [Eyob Dejene](https://github.com/EyobDejene) for helping with enter, update exit pattern of D3.
