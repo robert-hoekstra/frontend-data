@@ -1,7 +1,7 @@
 
 body{
   background-color:black;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 #wrapper{
@@ -37,7 +37,7 @@ svg{
     display: none;
     min-width: 80px;
     height: auto;
-    background: none repeat scroll 0 0 #ffffffc9;
+    background: none repeat scroll 0 0 rgb(0, 255, 149);
     border: 1px solid #6F257F;
     padding: 14px;
     text-align: center;
@@ -118,6 +118,7 @@ svg{
   h1, h2, h3, h4, h5, h6{
     color: #00DCFF;
     padding-bottom: 1rem;
+    font-family: 'Nunito', sans-serif;
   }
 
 

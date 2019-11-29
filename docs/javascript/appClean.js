@@ -143,7 +143,7 @@ fetchData.then(function(data) {
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    //Set Axis and ticks to y axis
+    //Set Axis and ticks to y and x axis
     g.append("g")
       .classed("y-axis", true)
       .call(d3.axisLeft(yScale));
@@ -223,9 +223,9 @@ fetchData.then(function(data) {
       .on("mousemove", function(d) {
         tooltip
           .style("left", d3.event.pageX - 50 + "px")
-          .style("top", d3.event.pageY - 70 + "px")
+          .style("top", d3.event.pageY - 100 + "px")
           .style("display", "inline-block")
-          .html("Jaartal: " + d.key + "<br>" + "Aantal foto: " + d.value.count);
+          .html("Jaartal: " + d.key + "<br>" + "Aantal foto: " + d.value.count + "<br>" + "Klik voor foto's");
       })
       .on("mouseout", function(d) {
         tooltip.style("display", "none");
