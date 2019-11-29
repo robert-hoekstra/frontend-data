@@ -36,9 +36,8 @@ You can now cycle through all the years to explore different collections of pict
 
 **2. Explore pictures**
 
-[![Image from Gyazo](https://i.gyazo.com/4c0b57ad9d72336422d6e663175df078.gif)](https://gyazo.com/4c0b57ad9d72336422d6e663175df078)
 
-
+![Image from Gyazo](https://i.gyazo.com/4c0b57ad9d72336422d6e663175df078.gif)
 ![explore-options](https://i.imgur.com/7dSvB0f.png)
 
 Select a picture to learn more about it. And about it's statistics.
