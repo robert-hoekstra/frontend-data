@@ -254,8 +254,8 @@ fetchData.then(function(data) {
         const xValue = d => d.value.count;
         const yValue = d => d.key;
         const margin = { top: 40, right: 40, bottom: 40, left: 100 };
-        const innerWidth = 500 - margin.left - margin.right;
-        const innerHeight = 300 - margin.top - margin.bottom;
+        let innerWidth = 500 - margin.left - margin.right;
+        let innerHeight = 300 - margin.top - margin.bottom;
         const xScale = d3
           .scaleLinear()
           .domain([0, d3.max(nestedData, xValue)])
