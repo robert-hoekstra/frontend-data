@@ -6,7 +6,6 @@ This application is about putting everybody's personal heritage on screen by col
 
 [![Image from Gyazo](https://i.gyazo.com/512d98854c916e6cf0a3fe653906dbdb.gif)](https://gyazo.com/512d98854c916e6cf0a3fe653906dbdb)
 
-
 ## Getting Started
 To start the application you need to clone the repository to your local machine. Once you have done that. Open the `index.html` file with a web-browser. I advise to use Chrome. You can download Chrome [here](https://www.google.com/intl/nl/chrome/).
 
@@ -116,5 +115,9 @@ Visitors of the musea in the Netherlands. I want to showcase something that can 
 #### functional-programming
 Basics of D3. Visualizing data. Part of the Tech Track course given @ Amsterdam University of Applied Sciences.
 
+# Documentation
+[Documentation](https://github.com/robert-hoekstra/frontend-data/wiki)
 
-
+# Acknowledgements 
+* [Eyob Dejene](https://github.com/EyobDejene) for helping with enter, update exit pattern of D3.
+* [Nick Meijer](https://github.com/CountNick)for helping out with arrow notations and scoops.
