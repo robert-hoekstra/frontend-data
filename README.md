@@ -119,8 +119,8 @@ Basics of D3. Visualizing data. Part of the Tech Track course given @ Amsterdam 
 [Documentation](https://github.com/robert-hoekstra/frontend-data/wiki)
 
 # Update Pattern (Dynamic Data)
-[Explanation Update Pattern](https://github.com/robert-hoekstra/frontend-data/wiki/D3)
-[How I used the pattenr](https://github.com/robert-hoekstra/frontend-data/wiki/D3-Bar-Chart#selecting-specific-data-enter-update-exit)
+* [Explanation Update Pattern](https://github.com/robert-hoekstra/frontend-data/wiki/D3)
+* [How I used the pattern](https://github.com/robert-hoekstra/frontend-data/wiki/D3-Bar-Chart#selecting-specific-data-enter-update-exit)
 
 # Acknowledgements 
 * [Eyob Dejene](https://github.com/EyobDejene) for helping with enter, update exit pattern of D3.
