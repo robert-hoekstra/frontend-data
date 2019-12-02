@@ -30,7 +30,7 @@ const query = `
 
                 }
 
-            }LIMIT 500`;
+            }LIMIT 600`;
 
 const fetchData = d3
   .json(url + "?query=" + encodeURIComponent(query) + "&format=json")
